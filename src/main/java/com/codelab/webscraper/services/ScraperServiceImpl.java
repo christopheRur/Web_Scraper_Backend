@@ -43,7 +43,7 @@ public class ScraperServiceImpl implements ScraperService{
 
         }
         catch(JSONException exception){
-            log.info("EROOOOOORRR------===========------- {}",exception.getMessage());
+            log.info("ERO=------- {}",exception.getMessage());
 
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("Error ",exception.getMessage());
