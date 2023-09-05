@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ScraperService {
-    public JSONObject scrapeWebsite(Scraper scraper);
+    public Scraper scrapeWebsite(Scraper scraper);
 
 }

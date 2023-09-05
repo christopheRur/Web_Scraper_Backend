@@ -11,14 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Scraper {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String title;
     private String url;
+    private String body;
     private String keyWordOne;
     private String keyWordTwo;
     private String keyWordThree;
-    private String status;
+    private int status;
     private String time;
 
 

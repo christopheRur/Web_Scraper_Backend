@@ -7,48 +7,41 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import org.jsoup.nodes.Document;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Date;
 
 @Slf4j
 @Service
 public class ScraperServiceImpl implements ScraperService{
 
-    public JSONObject scrapeWebsite(Scraper scraper){
+    public Scraper scrapeWebsite(Scraper scraper){
 
         try{
-            JSONObject jsonObj =new JSONObject();
 
             Document doc = Jsoup.connect(scraper.getUrl()).get();
 
             String title = doc.title();
-//            String keyword1 =doc.attr(scraper.getKeyWordOne());
-//            String keyWord2 =doc.attr(scraper.getKeyWordTwo());
-//            String keyWord3 =doc.attr(scraper.getKeyWordThree());
+
             String htmlBody =doc.body().data();
 
-            jsonObj.put("title",title);
-//            jsonObj.put("keyWord1",keyword1);
-//            jsonObj.put("keyWord2",keyWord2);
-//            jsonObj.put("keyWord3",keyWord3);
-
-            jsonObj.put("body",htmlBody);
-
-
+            scraper.setTitle(title);
+            scraper.setStatus(200);
+            scraper.setBody(htmlBody);
+            scraper.setTime(new Date().toString());
 
             log.info("----Scraper----=====>{}",title.toUpperCase());
 
-            return jsonObj;
+            return scraper;
 
         }
         catch(JSONException exception){
-            log.info("ERO=------- {}",exception.getMessage());
+            log.info("Error=------- {}",exception.getMessage());
 
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.put("Error ",exception.getMessage());
 
-        return jsonObj;
+        return scraper;
         }
         catch (IOException e) {
             throw new RuntimeException(e);
