@@ -19,6 +19,10 @@ public class Scraper {
     private String keyWordThree;
     private int status;
     private String time;
+    private int keysFound;
+    private Boolean key1Found;
+    private Boolean key2Found;
+    private Boolean key3Found;
 
 
 
