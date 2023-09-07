@@ -10,14 +10,51 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 @Slf4j
 @Service
 public class ScraperServiceImpl implements ScraperService {
+    private HashSet<String> allLinks = new HashSet<String>();
+    private HashSet<String> allImages = new HashSet<String>();
 
-    private ArrayList<String> allLinks = new ArrayList<String>();
+    /**
+     * Retrieves elements attribues
+     *
+     * @param attribute
+     * @param doc
+     * @return
+     */
+    private Elements retrieveElementAttributes(String attribute, Document doc) {
+        return doc.select(attribute);
+    }
+
+    /**
+     * Will iterate over links
+     *
+     * @param
+     */
+    private void collectElementData(Elements retrievedData, Scraper scraper, String attrKey) {
+
+        for (Element data : retrievedData) {
+
+
+            String singleDatum = retrievedData.attr(attrKey);
+
+
+            if (!singleDatum.isEmpty() && attrKey.contains("href")) {
+                allLinks.add(singleDatum);
+            }
+
+            if (!singleDatum.isEmpty() && attrKey.contains("src")) {
+                allImages.add(singleDatum);
+            }
+
+        }
+        scraper.setImages(allImages);
+        scraper.setLinks(allLinks);
+    }
 
     /**
      * Set values to keys
@@ -48,14 +85,17 @@ public class ScraperServiceImpl implements ScraperService {
 
             String htmlBody = doc.body().data();
 
-            Elements links= doc.select("a[href]");
+            Elements links = doc.select("a[href]");
 
-            for(Element link : links){
+            collectElementData(
+                    retrieveElementAttributes("a[href]", doc),
+                    scraper,
+                    "href");
 
-                String strLink = links.attr("href");
-                allLinks.add(strLink);
-            }
-             scraper.setLinks(allLinks);
+            collectElementData(
+                    retrieveElementAttributes("img[src]", doc),
+                    scraper,
+                    "src");
 
 
             scraper.setTitle(title);
@@ -90,7 +130,6 @@ public class ScraperServiceImpl implements ScraperService {
 
 
     }
-
 
 
 //    private ArrayList<String> retrieveAttributes(String attributes){

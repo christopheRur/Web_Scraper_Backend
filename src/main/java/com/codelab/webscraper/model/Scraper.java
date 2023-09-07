@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Data
@@ -25,7 +26,8 @@ public class Scraper {
     private Boolean key1Found;
     private Boolean key2Found;
     private Boolean key3Found;
-    private List<String> links;
+    private HashSet<String> links;
+    private HashSet<String> images;
 
 
 
