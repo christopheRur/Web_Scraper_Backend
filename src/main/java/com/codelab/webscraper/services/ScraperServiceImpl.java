@@ -5,16 +5,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Slf4j
 @Service
 public class ScraperServiceImpl implements ScraperService {
+
+    private ArrayList<String> allLinks = new ArrayList<String>();
+
     /**
-     *  Set values to keys
+     * Set values to keys
+     *
      * @param scraper
      * @param pageContent
      */
@@ -41,6 +48,15 @@ public class ScraperServiceImpl implements ScraperService {
 
             String htmlBody = doc.body().data();
 
+            Elements links= doc.select("a[href]");
+
+            for(Element link : links){
+
+                String strLink = links.attr("href");
+                allLinks.add(strLink);
+            }
+             scraper.setLinks(allLinks);
+
 
             scraper.setTitle(title);
             scraper.setStatus(200);
@@ -63,13 +79,10 @@ public class ScraperServiceImpl implements ScraperService {
                 setKeysValues(scraper, pageContent);
             }
 
-
             return scraper;
 
         } catch (JSONException exception) {
             log.info("Error=------- {}", exception.getMessage());
-
-
             return scraper;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -77,6 +90,13 @@ public class ScraperServiceImpl implements ScraperService {
 
 
     }
+
+
+
+//    private ArrayList<String> retrieveAttributes(String attributes){
+//
+//
+//    }
 
 
 }
