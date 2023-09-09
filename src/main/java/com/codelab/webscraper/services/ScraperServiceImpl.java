@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -18,6 +19,9 @@ import java.util.HashSet;
 public class ScraperServiceImpl implements ScraperService {
     private HashSet<String> allLinks = new HashSet<String>();
     private HashSet<String> allImages = new HashSet<String>();
+    private HashSet<String> classOne = new HashSet<String>();
+    private HashSet<String> classTwo = new HashSet<String>();
+    private HashSet<String> classThree = new HashSet<String>();
 
     /**
      * Retrieves elements attribues
@@ -31,11 +35,31 @@ public class ScraperServiceImpl implements ScraperService {
     }
 
     /**
-     * Will iterate over links
+     * Loop through the selected elements and extract data
+     * @param classKey
+     * @param scraper
+     */
+    private void extractInfoFromSpecificClass(String classKey, Scraper scraper, Document doc){
+        Elements element = doc.select("."+classKey);
+
+        for (Element el:element) {
+
+            String text = element.text();
+
+           classOne.add(text);
+        }
+
+        scraper.setClass1(classOne);
+    }
+
+    /**
+     * Will iterate over links, and extract those links
      *
      * @param
      */
     private void collectElementData(Elements retrievedData, Scraper scraper, String attrKey) {
+
+
 
         for (Element data : retrievedData) {
 
@@ -43,8 +67,10 @@ public class ScraperServiceImpl implements ScraperService {
             String singleDatum = retrievedData.attr(attrKey);
 
 
+
             if (!singleDatum.isEmpty() && attrKey.contains("href")) {
                 allLinks.add(singleDatum);
+
             }
 
             if (!singleDatum.isEmpty() && attrKey.contains("src")) {
@@ -54,6 +80,7 @@ public class ScraperServiceImpl implements ScraperService {
         }
         scraper.setImages(allImages);
         scraper.setLinks(allLinks);
+
     }
 
     /**
@@ -80,12 +107,13 @@ public class ScraperServiceImpl implements ScraperService {
         try {
 
             Document doc = Jsoup.connect(scraper.getUrl()).get();
+            URL baseUrl = new URL(scraper.getUrl());
 
             String title = doc.title();
 
             String htmlBody = doc.body().data();
 
-            Elements links = doc.select("a[href]");
+
 
             collectElementData(
                     retrieveElementAttributes("a[href]", doc),
@@ -96,6 +124,10 @@ public class ScraperServiceImpl implements ScraperService {
                     retrieveElementAttributes("img[src]", doc),
                     scraper,
                     "src");
+
+            extractInfoFromSpecificClass(scraper.getKeyWordOne(),scraper,doc);
+            extractInfoFromSpecificClass(scraper.getKeyWordTwo(),scraper,doc);
+            extractInfoFromSpecificClass(scraper.getKeyWordThree(),scraper,doc);
 
 
             scraper.setTitle(title);
@@ -132,10 +164,6 @@ public class ScraperServiceImpl implements ScraperService {
     }
 
 
-//    private ArrayList<String> retrieveAttributes(String attributes){
-//
-//
-//    }
 
 
 }

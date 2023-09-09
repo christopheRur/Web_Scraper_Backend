@@ -28,6 +28,7 @@ public class Scraper {
     private Boolean key3Found;
     private HashSet<String> links;
     private HashSet<String> images;
+    private HashSet<String> class1;
 
 
 
