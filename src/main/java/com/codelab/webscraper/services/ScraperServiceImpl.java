@@ -36,17 +36,18 @@ public class ScraperServiceImpl implements ScraperService {
 
     /**
      * Loop through the selected elements and extract data
+     *
      * @param classKey
      * @param scraper
      */
-    private void extractInfoFromSpecificClass(String classKey, Scraper scraper, Document doc){
-        Elements element = doc.select("."+classKey);
+    private void extractInfoFromSpecificClass(String classKey, Scraper scraper, Document doc) {
+        Elements element = doc.select("." + classKey);
 
-        for (Element el:element) {
+        for (Element el : element) {
 
             String text = element.text();
 
-           classOne.add(text);
+            classOne.add(text);
         }
 
         scraper.setClass1(classOne);
@@ -60,12 +61,10 @@ public class ScraperServiceImpl implements ScraperService {
     private void collectElementData(Elements retrievedData, Scraper scraper, String attrKey) {
 
 
-
         for (Element data : retrievedData) {
 
 
             String singleDatum = retrievedData.attr(attrKey);
-
 
 
             if (!singleDatum.isEmpty() && attrKey.contains("href")) {
@@ -114,7 +113,6 @@ public class ScraperServiceImpl implements ScraperService {
             String htmlBody = doc.body().data();
 
 
-
             collectElementData(
                     retrieveElementAttributes("a[href]", doc),
                     scraper,
@@ -125,9 +123,9 @@ public class ScraperServiceImpl implements ScraperService {
                     scraper,
                     "src");
 
-            extractInfoFromSpecificClass(scraper.getKeyWordOne(),scraper,doc);
-            extractInfoFromSpecificClass(scraper.getKeyWordTwo(),scraper,doc);
-            extractInfoFromSpecificClass(scraper.getKeyWordThree(),scraper,doc);
+            extractInfoFromSpecificClass(scraper.getKeyWordOne(), scraper, doc);
+            extractInfoFromSpecificClass(scraper.getKeyWordTwo(), scraper, doc);
+            extractInfoFromSpecificClass(scraper.getKeyWordThree(), scraper, doc);
 
 
             scraper.setTitle(title);
@@ -162,8 +160,6 @@ public class ScraperServiceImpl implements ScraperService {
 
 
     }
-
-
 
 
 }
