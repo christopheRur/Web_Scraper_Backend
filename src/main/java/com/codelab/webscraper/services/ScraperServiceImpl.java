@@ -40,7 +40,7 @@ public class ScraperServiceImpl implements ScraperService {
      * @param classKey String
 
      */
-    private String extractInfoFromSpecificClass(String classKey, Document doc, HashSet<String> details ) {
+    private void extractInfoFromSpecificClass(String classKey, Document doc,Scraper scraper, HashSet<String> details ) {
 
         Elements elementWithClass = doc.getElementsByClass(classKey);
 
@@ -50,8 +50,10 @@ public class ScraperServiceImpl implements ScraperService {
 
             details.add(text);
         }
+        if(scraper.getKeyWordOne().equals(classKey)) { scraper.setClassOne(details);}
+        if(scraper.getKeyWordTwo().equals(classKey)) { scraper.setClassTwo(details);}
+        if(scraper.getKeyWordThree().equals(classKey)) { scraper.setClassThree(details);}
 
-        return classKey;
 
     }
 
@@ -126,16 +128,9 @@ public class ScraperServiceImpl implements ScraperService {
                     "src");
 
 
-           if(extractInfoFromSpecificClass(scraper.getKeyWordOne(), doc, windowOne).equals(scraper.getKeyWordOne())){
-               scraper.setClassOne(windowOne);
-           }
-
-            if(extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc, windowTwo).equals(scraper.getKeyWordTwo())){
-                scraper.setClassOne(windowTwo);
-            }
-            if(extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc, windowThree).equals(scraper.getKeyWordThree())){
-                scraper.setClassThree(windowThree);
-            }
+           extractInfoFromSpecificClass(scraper.getKeyWordOne(), doc,scraper, windowOne);
+           extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc,scraper, windowTwo);
+           extractInfoFromSpecificClass(scraper.getKeyWordThree(), doc,scraper, windowThree);
 
 
 
