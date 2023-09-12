@@ -26,9 +26,9 @@ public class ScraperServiceImpl implements ScraperService {
     /**
      * Retrieves elements attribues
      *
-     * @param attribute
-     * @param doc
-     * @return
+     * @param attribute String
+     * @param doc Document
+     * @return Elements
      */
     private Elements retrieveElementAttributes(String attribute, Document doc) {
         return doc.select(attribute);
@@ -36,9 +36,8 @@ public class ScraperServiceImpl implements ScraperService {
 
     /**
      * Loop through the selected elements and extract data
-     *
-     * @param classKey
-     * @param scraper
+     * @param classKey String
+     * @param scraper String
      */
     private void extractInfoFromSpecificClass(String classKey, Scraper scraper, Document doc) {
         Elements element = doc.select("." + classKey);
