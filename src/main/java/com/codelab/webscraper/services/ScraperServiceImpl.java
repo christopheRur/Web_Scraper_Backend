@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -19,9 +20,9 @@ import java.util.HashSet;
 public class ScraperServiceImpl implements ScraperService {
     private HashSet<String> allLinks = new HashSet<String>();
     private HashSet<String> allImages = new HashSet<String>();
-    private HashSet<String> classOne = new HashSet<String>();
-    private HashSet<String> classTwo = new HashSet<String>();
-    private HashSet<String> classThree = new HashSet<String>();
+    private HashSet<String> windowOne = new HashSet<String>();
+    private HashSet<String> windowTwo = new HashSet<String>();
+    private HashSet<String> windowThree = new HashSet<String>();
 
     /**
      * Retrieves elements attribues
@@ -37,19 +38,21 @@ public class ScraperServiceImpl implements ScraperService {
     /**
      * Loop through the selected elements and extract data
      * @param classKey String
-     * @param scraper String
+
      */
-    private void extractInfoFromSpecificClass(String classKey, Scraper scraper, Document doc) {
-        Elements element = doc.select("." + classKey);
+    private String extractInfoFromSpecificClass(String classKey, Document doc, HashSet<String> details ) {
 
-        for (Element el : element) {
+        Elements elementWithClass = doc.getElementsByClass(classKey);
 
-            String text = element.text();
+        for (Element data : elementWithClass) {
 
-            classOne.add(text);
+            String text =" ->Related to keyword: "+classKey+" "+ Arrays.toString(data.text().split("----"));
+
+            details.add(text);
         }
 
-        scraper.setClass1(classOne);
+        return classKey;
+
     }
 
     /**
@@ -122,9 +125,18 @@ public class ScraperServiceImpl implements ScraperService {
                     scraper,
                     "src");
 
-            extractInfoFromSpecificClass(scraper.getKeyWordOne(), scraper, doc);
-            extractInfoFromSpecificClass(scraper.getKeyWordTwo(), scraper, doc);
-            extractInfoFromSpecificClass(scraper.getKeyWordThree(), scraper, doc);
+
+           if(extractInfoFromSpecificClass(scraper.getKeyWordOne(), doc, windowOne).equals(scraper.getKeyWordOne())){
+               scraper.setClassOne(windowOne);
+           }
+
+            if(extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc, windowTwo).equals(scraper.getKeyWordTwo())){
+                scraper.setClassOne(windowTwo);
+            }
+            if(extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc, windowThree).equals(scraper.getKeyWordThree())){
+                scraper.setClassThree(windowThree);
+            }
+
 
 
             scraper.setTitle(title);
