@@ -54,8 +54,33 @@ public class ScraperServiceImpl implements ScraperService {
         if(scraper.getKeyWordTwo().equals(classKey)) { scraper.setClassTwo(details);}
         if(scraper.getKeyWordThree().equals(classKey)) { scraper.setClassThree(details);}
 
+        extractInfoFromSpecificId(classKey,doc,scraper,details);
+
 
     }
+
+    private void extractInfoFromSpecificId(String classKey, Document doc,Scraper scraper, HashSet<String> details ) {
+
+        Element elementWithId = doc.getElementById(classKey);
+
+        if(elementWithId!=null) {
+
+            String text =elementWithId.text();
+
+            details.add(text);
+        }
+        else {
+            log.info("Couldn't find ID: {}",classKey);
+        }
+
+
+        if(scraper.getKeyWordOne().equals(classKey)) { scraper.setClassOne(details);}
+        if(scraper.getKeyWordTwo().equals(classKey)) { scraper.setClassTwo(details);}
+        if(scraper.getKeyWordThree().equals(classKey)) { scraper.setClassThree(details);}
+
+
+    }
+
 
     /**
      * Will iterate over links, and extract those links
