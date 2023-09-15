@@ -28,9 +28,12 @@ public class Scraper {
     private Boolean key3Found;
     private HashSet<String> links;
     private HashSet<String> images;
-    private HashSet<String> classOne;
-    private HashSet<String> classTwo;
-    private HashSet<String> classThree;
+    private HashSet<String> setOne;
+    private HashSet<String> setTwo;
+    private HashSet<String> setThree;
+    private HashSet<Integer> numericalValues;
+    private  Integer bodyLength;
+
 
 
 

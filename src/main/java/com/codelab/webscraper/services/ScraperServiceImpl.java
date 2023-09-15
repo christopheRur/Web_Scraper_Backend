@@ -23,6 +23,8 @@ public class ScraperServiceImpl implements ScraperService {
     private HashSet<String> windowOne = new HashSet<String>();
     private HashSet<String> windowTwo = new HashSet<String>();
     private HashSet<String> windowThree = new HashSet<String>();
+    private HashSet<Integer> numericalValues = new HashSet<>();
+
 
     /**
      * Retrieves elements attribues
@@ -51,13 +53,13 @@ public class ScraperServiceImpl implements ScraperService {
             details.add(text);
         }
         if (scraper.getKeyWordOne().equals(classKey)) {
-            scraper.setClassOne(details);
+            scraper.setSetOne(details);
         }
         if (scraper.getKeyWordTwo().equals(classKey)) {
-            scraper.setClassTwo(details);
+            scraper.setSetTwo(details);
         }
         if (scraper.getKeyWordThree().equals(classKey)) {
-            scraper.setClassThree(details);
+            scraper.setSetThree(details);
         }
 
         extractInfoFromSpecificId(classKey, doc, scraper, details);
@@ -72,20 +74,85 @@ public class ScraperServiceImpl implements ScraperService {
 
             String text = elementWithId.text();
 
-            details.add(text);
+            details.add("Related to Id " + classKey + ": " + text);
         } else {
             log.info("Couldn't find ID: {}", classKey);
         }
 
 
         if (scraper.getKeyWordOne().equals(classKey)) {
-            scraper.setClassOne(details);
+            scraper.setSetOne(details);
         }
         if (scraper.getKeyWordTwo().equals(classKey)) {
-            scraper.setClassTwo(details);
+            scraper.setSetTwo(details);
         }
         if (scraper.getKeyWordThree().equals(classKey)) {
-            scraper.setClassThree(details);
+            scraper.setSetThree(details);
+        }
+
+
+    }
+
+    /**
+     * Will extract all numerical values from webpage
+     *
+     * @param htmlBody
+     * @param scr
+     */
+    private void extractNumericValues(String htmlBody, Scraper scr) {
+
+        try {
+            HashSet<Integer> set = new HashSet<Integer>();
+
+            StringBuilder numStr = new StringBuilder();
+
+            set.add(0);
+            set.add(1);
+
+            if (!htmlBody.isEmpty()) {
+
+               // log.info("-=--------43343434333433443333433-=-==-=-=-===-=--=-=-=>{}",htmlBody);
+
+                scr.setBodyLength(htmlBody.length());
+
+
+                char[] chars = new char[htmlBody.length()];
+
+                for (int i = 0; i < htmlBody.length(); i++) {
+
+                    chars[i] = htmlBody.charAt(i);
+//                    log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}",chars[i]);
+                }
+
+                for (char data : chars) {
+
+                    if (Character.isDigit(data)) {
+                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}",data);
+
+                        numStr.append(data);
+                    } else {
+                        int extractedVal = Integer.parseInt(numStr.toString());
+                        numericalValues.add(extractedVal);
+                    }
+
+
+                }
+
+            } else {
+
+                scr.setBodyLength(0);
+                scr.setNumericalValues(set);
+            }
+
+
+        } catch (Exception e) {
+            HashSet<Integer> set = new HashSet<Integer>();
+            set.add(0);
+            set.remove(1);
+            scr.setNumericalValues(set);
+
+            log.error("Exception {}", e.getMessage());
+
         }
 
 
@@ -168,6 +235,7 @@ public class ScraperServiceImpl implements ScraperService {
 
             String htmlBody = doc.body().data();
 
+            extractNumericValues(htmlBody,scraper);
 
             collectElementLinks(
                     retrieveElementAttributes("a[href]", doc),
