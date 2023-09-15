@@ -28,7 +28,7 @@ public class ScraperServiceImpl implements ScraperService {
      * Retrieves elements attribues
      *
      * @param attribute String
-     * @param doc Document
+     * @param doc       Document
      * @return Elements
      */
     private Elements retrieveElementAttributes(String attribute, Document doc) {
@@ -37,57 +37,91 @@ public class ScraperServiceImpl implements ScraperService {
 
     /**
      * Loop through the selected elements and extract data
+     *
      * @param classKey String
-
      */
-    private void extractInfoFromSpecificClass(String classKey, Document doc,Scraper scraper, HashSet<String> details ) {
+    private void extractInfoFromSpecificClass(String classKey, Document doc, Scraper scraper, HashSet<String> details) {
 
         Elements elementWithClass = doc.getElementsByClass(classKey);
 
         for (Element data : elementWithClass) {
 
-            String text =" ->Related to keyword: "+classKey+" "+ Arrays.toString(data.text().split("----"));
+            String text = " ->Related to keyword: " + classKey + " " + Arrays.toString(data.text().split("----"));
 
             details.add(text);
         }
-        if(scraper.getKeyWordOne().equals(classKey)) { scraper.setClassOne(details);}
-        if(scraper.getKeyWordTwo().equals(classKey)) { scraper.setClassTwo(details);}
-        if(scraper.getKeyWordThree().equals(classKey)) { scraper.setClassThree(details);}
+        if (scraper.getKeyWordOne().equals(classKey)) {
+            scraper.setClassOne(details);
+        }
+        if (scraper.getKeyWordTwo().equals(classKey)) {
+            scraper.setClassTwo(details);
+        }
+        if (scraper.getKeyWordThree().equals(classKey)) {
+            scraper.setClassThree(details);
+        }
 
-        extractInfoFromSpecificId(classKey,doc,scraper,details);
+        extractInfoFromSpecificId(classKey, doc, scraper, details);
+
+    }
+
+    private void extractInfoFromSpecificId(String classKey, Document doc, Scraper scraper, HashSet<String> details) {
+
+        Element elementWithId = doc.getElementById(classKey);
+
+        if (elementWithId != null) {
+
+            String text = elementWithId.text();
+
+            details.add(text);
+        } else {
+            log.info("Couldn't find ID: {}", classKey);
+        }
+
+
+        if (scraper.getKeyWordOne().equals(classKey)) {
+            scraper.setClassOne(details);
+        }
+        if (scraper.getKeyWordTwo().equals(classKey)) {
+            scraper.setClassTwo(details);
+        }
+        if (scraper.getKeyWordThree().equals(classKey)) {
+            scraper.setClassThree(details);
+        }
 
 
     }
 
-    private void extractInfoFromSpecificId(String classKey, Document doc,Scraper scraper, HashSet<String> details ) {
+    /**
+     * Will iterate over html and extract links
+     *
+     * @param
+     */
+    private void collectElementLinks(Elements linksData, Scraper scraper, String attrKey) {
 
-        Element elementWithId = doc.getElementById(classKey);
 
-        if(elementWithId!=null) {
+        for (Element data : linksData) {
 
-            String text =elementWithId.text();
 
-            details.add(text);
+            String singleDatum = linksData.attr(attrKey);
+
+
+            if (!singleDatum.isEmpty() && attrKey.contains("href")) {
+                allLinks.add(singleDatum);
+            }
+
         }
-        else {
-            log.info("Couldn't find ID: {}",classKey);
-        }
 
-
-        if(scraper.getKeyWordOne().equals(classKey)) { scraper.setClassOne(details);}
-        if(scraper.getKeyWordTwo().equals(classKey)) { scraper.setClassTwo(details);}
-        if(scraper.getKeyWordThree().equals(classKey)) { scraper.setClassThree(details);}
-
+        scraper.setLinks(allLinks);
 
     }
 
 
     /**
-     * Will iterate over links, and extract those links
+     * Will iterate and extract image links
      *
      * @param
      */
-    private void collectElementData(Elements retrievedData, Scraper scraper, String attrKey) {
+    private void collectElementImage(Elements retrievedData, Scraper scraper, String attrKey) {
 
 
         for (Element data : retrievedData) {
@@ -95,19 +129,12 @@ public class ScraperServiceImpl implements ScraperService {
 
             String singleDatum = retrievedData.attr(attrKey);
 
-
-            if (!singleDatum.isEmpty() && attrKey.contains("href")) {
-                allLinks.add(singleDatum);
-
-            }
-
             if (!singleDatum.isEmpty() && attrKey.contains("src")) {
                 allImages.add(singleDatum);
             }
 
         }
         scraper.setImages(allImages);
-        scraper.setLinks(allLinks);
 
     }
 
@@ -142,25 +169,23 @@ public class ScraperServiceImpl implements ScraperService {
             String htmlBody = doc.body().data();
 
 
-            collectElementData(
+            collectElementLinks(
                     retrieveElementAttributes("a[href]", doc),
                     scraper,
                     "href");
 
-            collectElementData(
+            collectElementImage(
                     retrieveElementAttributes("img[src]", doc),
                     scraper,
                     "src");
 
 
-           extractInfoFromSpecificClass(scraper.getKeyWordOne(), doc,scraper, windowOne);
-           extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc,scraper, windowTwo);
-           extractInfoFromSpecificClass(scraper.getKeyWordThree(), doc,scraper, windowThree);
-
+            extractInfoFromSpecificClass(scraper.getKeyWordOne(), doc, scraper, windowOne);
+            extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc, scraper, windowTwo);
+            extractInfoFromSpecificClass(scraper.getKeyWordThree(), doc, scraper, windowThree);
 
 
             scraper.setTitle(title);
-            scraper.setStatus(200);
             scraper.setBody(doc.select("h1").toString());
             scraper.setTime(new Date().toString());
 

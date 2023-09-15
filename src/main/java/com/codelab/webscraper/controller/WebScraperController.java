@@ -24,15 +24,19 @@ public class WebScraperController {
 
         try {
             if (scrapedBody == null) {
-
+                scrapedBody.setStatus(400);
                 return ResponseEntity.badRequest().body("NoScrapedDataFound!");
 
-            } else return new ResponseEntity<>(scraperServ.scrapeWebsite(scrapedBody), HttpStatus.OK);
+            } else {
+
+                scrapedBody.setStatus(200);
+                return new ResponseEntity<>(scraperServ.scrapeWebsite(scrapedBody), HttpStatus.OK);}
 
         } catch (Exception e) {
 
             log.error("==>" + e.getLocalizedMessage());
 
+            scrapedBody.setStatus(400);
             return ResponseEntity.badRequest().body("Error occurred, unable to FETCH data.");
         }
 
