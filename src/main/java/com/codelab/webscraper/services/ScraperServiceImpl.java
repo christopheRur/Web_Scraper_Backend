@@ -42,7 +42,7 @@ public class ScraperServiceImpl implements ScraperService {
      *
      * @param classKey String
      */
-    private void extractInfoFromSpecificClass(String classKey, Document doc, Scraper scraper, HashSet<String> details) {
+    private void extractInfoFromSpecificTerminalInput(String classKey, Document doc, Scraper scraper, HashSet<String> details) {
 
         Elements elementWithClass = doc.getElementsByClass(classKey);
 
@@ -55,10 +55,10 @@ public class ScraperServiceImpl implements ScraperService {
         if (scraper.getKeyWordOne().equals(classKey)) {
             scraper.setSetOne(details);
         }
-        if (scraper.getKeyWordTwo().equals(classKey)) {
+        else if (scraper.getKeyWordTwo().equals(classKey)) {
             scraper.setSetTwo(details);
         }
-        if (scraper.getKeyWordThree().equals(classKey)) {
+       else if (scraper.getKeyWordThree().equals(classKey)) {
             scraper.setSetThree(details);
         }
 
@@ -121,12 +121,13 @@ public class ScraperServiceImpl implements ScraperService {
                 for (int i = 0; i < htmlBody.length(); i++) {
 
                     chars[i] = htmlBody.charAt(i);
-//                    log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}",chars[i]);
+                    if(!String.valueOf(chars[i]).equals("."))
+                    log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}",chars[i]);
                 }
 
                 for (char data : chars) {
-
-                    if (Character.isDigit(data)) {
+                    Integer.parseInt(String.valueOf(data));
+                    if (Character.isDigit(Integer.parseInt(String.valueOf(data)))) {
                         log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}",data);
 
                         numStr.append(data);
@@ -248,9 +249,9 @@ public class ScraperServiceImpl implements ScraperService {
                     "src");
 
 
-            extractInfoFromSpecificClass(scraper.getKeyWordOne(), doc, scraper, windowOne);
-            extractInfoFromSpecificClass(scraper.getKeyWordTwo(), doc, scraper, windowTwo);
-            extractInfoFromSpecificClass(scraper.getKeyWordThree(), doc, scraper, windowThree);
+            extractInfoFromSpecificTerminalInput(scraper.getKeyWordOne(), doc, scraper, windowOne);
+            extractInfoFromSpecificTerminalInput(scraper.getKeyWordTwo(), doc, scraper, windowTwo);
+            extractInfoFromSpecificTerminalInput(scraper.getKeyWordThree(), doc, scraper, windowThree);
 
 
             scraper.setTitle(title);
