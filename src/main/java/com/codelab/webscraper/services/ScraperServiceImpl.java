@@ -54,11 +54,9 @@ public class ScraperServiceImpl implements ScraperService {
         }
         if (scraper.getKeyWordOne().equals(classKey)) {
             scraper.setSetOne(details);
-        }
-        else if (scraper.getKeyWordTwo().equals(classKey)) {
+        } else if (scraper.getKeyWordTwo().equals(classKey)) {
             scraper.setSetTwo(details);
-        }
-       else if (scraper.getKeyWordThree().equals(classKey)) {
+        } else if (scraper.getKeyWordThree().equals(classKey)) {
             scraper.setSetThree(details);
         }
 
@@ -111,7 +109,7 @@ public class ScraperServiceImpl implements ScraperService {
 
             if (!htmlBody.isEmpty()) {
 
-               // log.info("-=--------43343434333433443333433-=-==-=-=-===-=--=-=-=>{}",htmlBody);
+                // log.info("-=--------43343434333433443333433-=-==-=-=-===-=--=-=-=>{}",htmlBody);
 
                 scr.setBodyLength(htmlBody.length());
 
@@ -121,14 +119,14 @@ public class ScraperServiceImpl implements ScraperService {
                 for (int i = 0; i < htmlBody.length(); i++) {
 
                     chars[i] = htmlBody.charAt(i);
-                    if(!String.valueOf(chars[i]).equals("."))
-                    log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}",chars[i]);
+                    if (!String.valueOf(chars[i]).equals("."))
+                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}", chars[i]);
                 }
 
                 for (char data : chars) {
                     Integer.parseInt(String.valueOf(data));
                     if (Character.isDigit(Integer.parseInt(String.valueOf(data)))) {
-                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}",data);
+                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}", data);
 
                         numStr.append(data);
                     } else {
@@ -236,7 +234,7 @@ public class ScraperServiceImpl implements ScraperService {
 
             String htmlBody = doc.body().data();
 
-            extractNumericValues(htmlBody,scraper);
+            extractNumericValues(htmlBody, scraper);
 
             collectElementLinks(
                     retrieveElementAttributes("a[href]", doc),
