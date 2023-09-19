@@ -109,39 +109,59 @@ public class ScraperServiceImpl implements ScraperService {
 
             if (!htmlBody.isEmpty()) {
 
-                // log.info("-=--------43343434333433443333433-=-==-=-=-===-=--=-=-=>{}",htmlBody);
-
                 scr.setBodyLength(htmlBody.length());
+                String modifiedStr = htmlBody.replaceAll("[^0-9]", "");
+                String allNumbers=modifiedStr.trim();
+                allNumbers=allNumbers.replaceAll(" + ", "  ");
+
+                if (allNumbers.equals(" "))
+                    log.info("-=------>{}","found white spaces");
+
+                else {
+                        for(int i=0; i<allNumbers.length(); i++){
+                            char c = allNumbers.charAt(i);
+                            if(Character.isDigit(c)){
+                                numStr.append(c);
+                                int numVal= Integer.valueOf(c);
+                                numericalValues.add(numVal);
+                            }
+                        }
+
+                    log.info("-=------>{}",numStr);}
+
+            }
+
+
 
 
                 char[] chars = new char[htmlBody.length()];
 
-                for (int i = 0; i < htmlBody.length(); i++) {
+//                for (int i = 0; i < htmlBody.length(); i++) {
+//
+//                    chars[i] = htmlBody.charAt(i);
+//                    if (!String.valueOf(chars[i]).equals("."))
+//                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}", chars[i]);
+//                }
 
-                    chars[i] = htmlBody.charAt(i);
-                    if (!String.valueOf(chars[i]).equals("."))
-                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}", chars[i]);
-                }
+//                for (char data : chars) {
+//                    Integer.parseInt(String.valueOf(data));
+//                    if (Character.isDigit(Integer.parseInt(String.valueOf(data)))) {
+//                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}", data);
+//
+//                        numStr.append(data);
+//                    } else {
+//                        int extractedVal = Integer.parseInt(numStr.toString());
+//                        numericalValues.add(extractedVal);
+//                    }
+//
+//
+//                }
 
-                for (char data : chars) {
-                    Integer.parseInt(String.valueOf(data));
-                    if (Character.isDigit(Integer.parseInt(String.valueOf(data)))) {
-                        log.info("-=------->>>>>.>........>>>>>>>>>>>>--{}", data);
-
-                        numStr.append(data);
-                    } else {
-                        int extractedVal = Integer.parseInt(numStr.toString());
-                        numericalValues.add(extractedVal);
-                    }
-
-
-                }
-
-            } else {
-
-                scr.setBodyLength(0);
-                scr.setNumericalValues(set);
-            }
+//            } else {
+//
+//                scr.setBodyLength(0);
+//                scr.setNumericalValues(set);
+//            }
 
 
         } catch (Exception e) {
