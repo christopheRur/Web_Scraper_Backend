@@ -32,7 +32,8 @@ public class WebScraperController {
             } else {
 
                 scrapedBody.setStatus(200);
-                return new ResponseEntity<>(scraperServ.scrapeWebsite(scrapedBody), HttpStatus.OK);}
+                return new ResponseEntity<>(scraperServ.scrapeWebsite(scrapedBody), HttpStatus.OK);
+            }
 
         } catch (Exception e) {
 
