@@ -1,14 +1,10 @@
 package com.codelab.webscraper.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -32,10 +28,7 @@ public class Scraper {
     private HashSet<String> setTwo;
     private HashSet<String> setThree;
     private HashSet<Integer> numericalValues;
-    private  Integer bodyLength;
-
-
-
+    private Integer bodyLength;
 
 
 }
