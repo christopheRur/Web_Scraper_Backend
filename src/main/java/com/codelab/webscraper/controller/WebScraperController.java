@@ -23,7 +23,6 @@ public class WebScraperController {
 
     @PostMapping("/fetch")
     public ResponseEntity<?> fetchKeyWords(@RequestBody Scraper scrapedBody) {
-
         try {
             if (scrapedBody == null) {
                 scrapedBody.setStatus(400);

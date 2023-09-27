@@ -52,15 +52,17 @@ public class ScraperServiceImpl implements ScraperService {
 
             details.add(text);
         }
+        HashSet<String> copiedResults = new HashSet<>(details);
+        details.clear();
         if (scraper.getKeyWordOne().equals(classKey)) {
-            scraper.setSetOne(details);
+            scraper.setSetOne(copiedResults);
         } else if (scraper.getKeyWordTwo().equals(classKey)) {
-            scraper.setSetTwo(details);
+            scraper.setSetTwo(copiedResults);
         } else if (scraper.getKeyWordThree().equals(classKey)) {
-            scraper.setSetThree(details);
+            scraper.setSetThree(copiedResults);
         }
 
-        extractInfoFromSpecificId(classKey, doc, scraper, details);
+        extractInfoFromSpecificId(classKey, doc, scraper, copiedResults);
 
     }
 
@@ -164,7 +166,10 @@ public class ScraperServiceImpl implements ScraperService {
 
         }
 
-        scraper.setLinks(allLinks);
+        HashSet<String> copiedResults = new HashSet<>(allLinks);
+        allLinks.clear();
+
+        scraper.setLinks(copiedResults);
 
     }
 
@@ -187,7 +192,9 @@ public class ScraperServiceImpl implements ScraperService {
             }
 
         }
-        scraper.setImages(allImages);
+        HashSet<String> copiedResults = new HashSet<>(allImages);
+        allImages.clear();
+        scraper.setImages(copiedResults);
 
     }
 
