@@ -125,7 +125,11 @@ public class ScraperServiceImpl implements ScraperService {
                         numericalValues.add((int) c);
 
                     }
-                    scr.setNumericalValues(numericalValues);
+
+                    HashSet<Integer> copiedResults = new HashSet<>(numericalValues);
+                    numericalValues.clear();
+
+                    scr.setNumericalValues(copiedResults);
 
                     log.info("-=------>{}", numStr);
                 }
