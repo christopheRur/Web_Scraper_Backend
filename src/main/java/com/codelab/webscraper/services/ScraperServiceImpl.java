@@ -192,7 +192,7 @@ public class ScraperServiceImpl implements ScraperService {
             String singleDatum = retrievedData.attr(attrKey);
 
             if (!singleDatum.isEmpty() && attrKey.contains("src")) {
-                allImages.add(singleDatum);
+                allImages.add(scraper.getUrl()+singleDatum);
             }
 
         }
