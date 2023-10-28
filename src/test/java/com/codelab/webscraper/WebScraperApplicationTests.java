@@ -21,31 +21,31 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 class WebScraperApplicationTests {
 
-	@Mock
-	Scraper scraper;
-	@Mock
-	ScraperServiceImpl service;
-	@InjectMocks
-	WebScraperController controller;
+    @Mock
+    Scraper scraper;
+    @Mock
+    ScraperServiceImpl service;
+    @InjectMocks
+    WebScraperController controller;
 
-	@Test
-	public void testFetchWords(){
+    @Test
+    public void testFetchWords() {
 
-		Scraper sc=new Scraper();
-		sc.setStatus(200);
-		sc.setKeyWordOne("test1");
-		sc.setKeyWordTwo("test2");
-		sc.setKeyWordThree("test3");
+        Scraper sc = new Scraper();
+        sc.setStatus(200);
+        sc.setKeyWordOne("test1");
+        sc.setKeyWordTwo("test2");
+        sc.setKeyWordThree("test3");
 
-		Mockito.when(service.scrapeWebsite(sc)).thenReturn(new Scraper());
-		ResponseEntity<?> response = controller.fetchKeyWords(service.scrapeWebsite(sc));
+        Mockito.when(service.scrapeWebsite(sc)).thenReturn(new Scraper());
+        ResponseEntity<?> response = controller.fetchKeyWords(service.scrapeWebsite(sc));
 
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-	}
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 
 }
