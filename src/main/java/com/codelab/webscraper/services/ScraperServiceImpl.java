@@ -66,6 +66,13 @@ public class ScraperServiceImpl implements ScraperService {
 
     }
 
+    /**
+     *  Extract information pertaining to specific id
+     * @param classKey
+     * @param doc
+     * @param scraper
+     * @param details
+     */
     private void extractInfoFromSpecificId(String classKey, Document doc, Scraper scraper, HashSet<String> details) {
 
         Element elementWithId = doc.getElementById(classKey);
